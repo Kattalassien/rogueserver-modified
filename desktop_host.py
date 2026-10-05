@@ -9,6 +9,7 @@ records all launch and request errors in host.log.
 from __future__ import annotations
 
 import configparser
+import html
 import json
 import logging
 import os
@@ -175,7 +176,11 @@ class ControlHandler(BaseHTTPRequestHandler):
             self.send(page("RogueServer dashboard", f"<h1>RogueServer dashboard</h1><pre>{status}</pre>"))
         elif path == "/editor":
             values = {key: value for key, value in self.state.values.items() if key != "admin_token"}
-            fields = "".join(f'<label>{key}<input name="{key}" value="{value}"></label>' for key, value in values.items())
+            fields = "".join(
+                f'<label>{html.escape(key)}<input name="{html.escape(key)}" '
+                f'value="{html.escape(value, quote=True)}"></label>'
+                for key, value in values.items()
+            )
             self.send(page("Live editor", f"""<h1>Live configuration</h1>
 <p>Changes affect the next launch. Use a private network or set an admin token before exposing this page.</p>
 <form method="post">{fields}<label>Admin token<input type="password" name="token"></label>
@@ -193,8 +198,8 @@ class ControlHandler(BaseHTTPRequestHandler):
         from urllib.parse import unquote_plus
         fields = {unquote_plus(k): unquote_plus(v) for k, v in fields.items()}
         expected = self.state.values.get("admin_token", "")
-        if expected and not secrets.compare_digest(fields.get("token", ""), expected):
-            self.send(b"invalid admin token", HTTPStatus.FORBIDDEN, "text/plain")
+        if not expected or not secrets.compare_digest(fields.get("token", ""), expected):
+            self.send(b"set admin_token and provide the correct token", HTTPStatus.FORBIDDEN, "text/plain")
             return
         self.state.update(fields)
         self.send(page("Saved", '<p>Saved. <a href="/editor">Return to editor</a></p>'))

@@ -1,0 +1,10 @@
+2026-10-05 12:09:03,766 INFO control panel started at port 18765
+2026-10-05 12:09:03,766 INFO launched server command: false (pid 8257)
+2026-10-05 12:09:03,766 ERROR Tk is unavailable; running headless with the dashboard active
+Traceback (most recent call last):
+  File "/home/runner/work/rogueserver-modified/rogueserver-modified/desktop_host.py", line 212, in gui
+    from tkinter import StringVar, Tk, ttk
+ModuleNotFoundError: No module named 'tkinter'
+2026-10-05 12:09:03,767 INFO server exited with code 1
+2026-10-05 12:09:04,735 INFO http "GET /api/status HTTP/1.1" 200 -
+2026-10-05 12:09:04,739 INFO http "GET /api/config HTTP/1.1" 200 -
