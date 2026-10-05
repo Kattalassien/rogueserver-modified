@@ -1,0 +1,10 @@
+[host]
+# Bind to 0.0.0.0 for access from an iPhone on the same network.
+host = 0.0.0.0
+dashboard_port = 8765
+game_url = http://localhost:8000
+server_url = http://localhost:8001
+launch_command = docker compose -f docker-compose.Development.yml up --build
+stop_command = docker compose -f docker-compose.Development.yml down
+# Set this before exposing the editor outside your LAN.
+admin_token =

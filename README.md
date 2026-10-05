@@ -20,6 +20,30 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - [Running without Podman/Docker](#running-without-podmandocker)
 - [Self Hosting](#self-hosting)
 - [Podman/Docker Mini Primer](#podmandocker-mini-primer)
+- [Desktop host control panel](#desktop-host-control-panel)
+
+## Desktop host control panel
+
+`desktop_host.py` provides a lightweight Tk GUI and two local web URLs without
+additional Python packages:
+
+```sh
+cp host.ini.example host.ini
+python3 desktop_host.py
+```
+
+The dashboard is at `http://localhost:8765/`; the live configuration editor is
+at `http://localhost:8765/editor`. The script starts the configured Docker
+Compose command, captures its output in `host.log`, and keeps the dashboard
+available if Docker, Go, or MariaDB fails. Set `admin_token` before exposing
+the editor beyond a trusted network. For an iPhone on the same LAN, use the
+desktop's LAN IP and allow TCP ports 8765 and 8001 through the firewall.
+Public Internet access additionally requires router port forwarding or a
+privacy-preserving tunnel; do not expose the editor without authentication.
+
+Use `python3 desktop_host.py --check` to validate configuration without
+launching services. Supabase/Notion are intentionally not required: this
+control plane stores only local configuration and avoids embedding credentials.
 
 ## Quickstart (Linux/WSL, Podman/Docker)
 
