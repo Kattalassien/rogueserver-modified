@@ -1,0 +1,14 @@
+{
+  "enabled": [
+    {
+      "name": "test-mod",
+      "url": "http://example.com"
+    }
+  ],
+  "disabled": [],
+  "userScripts": [],
+  "metadata": {
+    "lastUpdated": "2026-10-06",
+    "version": "1.0"
+  }
+}

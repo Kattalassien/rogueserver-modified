@@ -1,0 +1,12 @@
+{
+  "pokemonCatchLimit": 500,
+  "maxLevel": 100,
+  "difficultyMultiplier": 1.0,
+  "experienceMultiplier": 1.0,
+  "enableRandomEvents": true,
+  "enableTrainerScaling": true,
+  "allowSwitching": true,
+  "startingPokemonLevel": 5,
+  "basePokemonStats": "normal",
+  "trainerDifficulty": "normal"
+}
