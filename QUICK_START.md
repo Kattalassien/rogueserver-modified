@@ -14,17 +14,35 @@ Edit `host.ini`:
 [host]
 host = 0.0.0.0
 dashboard_port = 8765
+game_url = http://localhost:8000
+server_url = http://localhost:8001
+launch_command = docker compose -f docker-compose.Development.yml up --build
+stop_command = docker compose -f docker-compose.Development.yml down
 admin_token = your_secure_password
 ```
 
-### Step 3: Launch
+### Step 3: Build the local server image
+This project’s development Compose expects a local image named `rogueserver:dev`.
+
+```bash
+docker build -t rogueserver:dev .
+```
+
+If Docker Hub is rate-limited, retry later or build on a machine with registry access; the app itself compiles successfully with:
+
+```bash
+go build -tags=devsetup -o /tmp/rogueserver-test .
+```
+
+### Step 4: Launch
 ```bash
 python3 desktop_host.py
 ```
 
-### Step 4: Access Dashboard
+### Step 5: Access Dashboard
 - **Desktop**: `http://localhost:8765`
 - **iPhone/Other Devices**: `http://<YOUR_PC_IP>:8765`
+- **API**: `http://<YOUR_PC_IP>:8001`
 
 ---
 

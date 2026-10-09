@@ -230,7 +230,19 @@ GET  /api/mods               # JSON: mod configuration
 - [x] Real-time game variables editor
 - [x] Mod manager interface
 - [x] Error logging and recovery
-- [x] LAN/iPhone access support
+- [x] LAN/iPhone access support in docs and control-panel config
+
+### Phase 1.5: Local iPhone/LAN Validation (In Progress)
+- [ ] Build the local `rogueserver:dev` image on a machine with Docker registry access
+- [ ] Start MariaDB + API stack with `docker compose -f docker-compose.Development.yml up --build`
+- [ ] Confirm dashboard loads at `http://<LAN_IP>:8765`
+- [ ] Confirm API responds at `http://<LAN_IP>:8001`
+- [ ] Test from an actual iPhone on the same WiFi network
+- [ ] Capture the final working URLs and mobile game configuration values
+
+### Current blocker
+- [ ] Docker Hub rate limiting blocked the local build in this sandbox (`429 Too Many Requests` fetching the Go base image).
+- [ ] The Go server itself compiles successfully with `go build -tags=devsetup`, so the remaining work is environment/registry setup and device validation.
 
 ### Phase 2: Planned
 - [ ] Notion integration for documentation
@@ -240,6 +252,7 @@ GET  /api/mods               # JSON: mod configuration
 - [ ] Real-time player monitoring
 - [ ] Performance metrics dashboard
 - [ ] Remote access via secure tunnel
+- [ ] Mobile-first admin views for iPhone-sized screens
 
 ### Phase 3: Advanced
 - [ ] Multi-server management
@@ -248,6 +261,29 @@ GET  /api/mods               # JSON: mod configuration
 - [ ] Custom mod creation wizard
 - [ ] Community mod repository
 - [ ] Live game event streaming
+- [ ] Plugin marketplace and version compatibility checks
+
+### Feature and API backlog (ideas to prioritize)
+- [ ] Mobile account/session management endpoints (login, save sync, inventory export)
+- [ ] Plugin hooks for battle events, encounters, and reward calculations
+- [ ] Mod manifest / metadata API for install, disable, and update flows
+- [ ] Webhook endpoints for game events or admin notifications
+- [ ] Player analytics endpoints for session length, wins, catches, and progression
+- [ ] Save-state backup/restore API with versioning
+- [ ] Admin-only API for configuration drift checks and server health snapshots
+- [ ] Community leaderboard or achievement API for external tools
+
+### What I need from you to finish the iPhone test
+- [ ] Confirm whether you want to test only on your home WiFi LAN or also via a public tunnel/VPN
+- [ ] Share the machine name or OS you’ll run this on (Mac, Windows, Linux, or WSL)
+- [ ] Tell me whether you want to connect the official PokeRogue client or a custom/local game frontend
+- [ ] Add any features, plugins, or APIs you want to prototype first (examples: mod installer, server metrics, save backup, auth, event webhooks)
+
+### Ways to help us decide the next feature set
+- [ ] Send screenshots or notes about how you want to manage the server from your phone
+- [ ] Tell us which game flows matter most: battle tuning, progression, mod loading, save syncing, or admin controls
+- [ ] Share any external API or service you’d like to integrate next (Notion, Supabase, Discord, analytics, backups)
+- [ ] If you already know a plugin or script idea, describe the workflow in one or two sentences and I’ll turn it into a roadmap item
 
 ---
 
