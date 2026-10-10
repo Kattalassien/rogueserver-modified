@@ -1,0 +1,59 @@
+name: Deploy to Google Cloud Run
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: your-gcp-project-id
+  SERVICE_NAME: rogueserver
+  REGION: us-central1
+  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Test build
+        run: go test ./...
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Configure gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for GHCR
+        run: echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push image
+        run: |
+          docker build -t $IMAGE .
+          docker push $IMAGE
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy "$SERVICE_NAME" \
+            --image "$IMAGE" \
+            --platform managed \
+            --region "$REGION" \
+            --allow-unauthenticated \
+            --set-env-vars "debug=true,dbaddr=${{ secrets.DB_ADDR }},dbuser=${{ secrets.DB_USER }},dbpass=${{ secrets.DB_PASS }},dbname=${{ secrets.DB_NAME }},gameurl=https://${{ secrets.PUBLIC_HOST }},callbackurl=https://${{ secrets.PUBLIC_HOST }}"
